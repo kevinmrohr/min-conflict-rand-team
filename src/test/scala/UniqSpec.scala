@@ -1,4 +1,5 @@
 import org.scalatest._
+import util.RoundGenerator
 
 class UniqSpec extends FlatSpec with Matchers {
   "A set of men and a set of women" should "produce a uniq list of all 2 men 2 women possible combinations" in {
@@ -10,7 +11,7 @@ class UniqSpec extends FlatSpec with Matchers {
       "Julie", "Ellie", "Farrah", "Ava")
 
 
-    val uniqQuads = new UniqQuadGenerator().generateUniqQuads(men, women)
+    val uniqQuads = new RoundGenerator().generateUniqQuads(men, women)
 
     uniqQuads.foreach(q => println(q))
     println(uniqQuads.size)
@@ -22,7 +23,7 @@ class UniqSpec extends FlatSpec with Matchers {
     val women = Set("Lorena Bobbitt", "Jenny", "Psycho Sarah", "Monica",
       "Amy", "Alexandria", "Poppy", "Eleanor",
       "Julie", "Ellie", "Farrah", "Ava")
-    val rounds = new UniqQuadGenerator().generateRounds(6, men, women)
+    val rounds = new RoundGenerator().generateRounds(6, men, women)
 
     rounds.foreach(r => println(r))
   }
@@ -37,7 +38,7 @@ class UniqSpec extends FlatSpec with Matchers {
         Set("John Bobbitt", "Ernie")
       )
       val men = Set("Bert", "Ernie", "John Bobbitt", "Fuckin Frank")
-      val uniqPairs = new UniqQuadGenerator().generateUniqPairs(men)
+      val uniqPairs = new util.UniqQuadGenerator().generateUniqPairs(men)
 
       uniqPairs.foreach(p => println(p))
       //Sorting.stableSort(uniqPairs.toSeq) should be (Sorting.stableSort(expected.toSeq))
