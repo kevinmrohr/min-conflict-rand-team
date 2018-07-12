@@ -78,6 +78,6 @@ object ExcelReader {
         lowerMen += r.getCell(lowerWomenIndex).getStringCellValue
       })
 
-    new UpperLowerCoedQuadPlayers(upperMen, upperWomen, lowerMen, lowerWomen)
+    PlayerBalancer.balanceUpperLowerCoedQuadsPlayers(new UpperLowerCoedQuadPlayers(upperMen, upperWomen, lowerMen, lowerWomen))
   }
 }

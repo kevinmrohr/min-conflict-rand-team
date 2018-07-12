@@ -1,0 +1,13 @@
+Generic coed quads:
+1. more men than women -> balance by moving lower men to women group
+2. more women than men -> balance by moving upper women to men group
+
+Upper/Lower coed quads:
+1. more women than men -> balance by moving
+1. more upper men than lower men -> balance by moving upper men to lower men
+2. more lower men than upper men -> balance by moving lower men to upper men
+3. " women
+4. " women
+
+Upper Men            Upper Women       Lower Men        Lower women
+4                    5                 12               10

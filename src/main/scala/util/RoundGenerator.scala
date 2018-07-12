@@ -1,10 +1,11 @@
 package util
 
-import model.Round
+import model.{Round, UpperLowerCoedQuadPlayers}
 
 object RoundGenerator {
   def generateCoedQuadsUpperLowerRounds(roundCount: Int, upperMen: Set[String], upperWomen: Set[String], lowerMen: Set[String], lowerWomen: Set[String]): Set[Round] = {
-    val uniqQuads:Set[Set[String]] = QuadGenerator.generateUniqUpperLowerCoedQuads(upperMen, lowerMen, upperWomen, lowerWomen)
+    val players:UpperLowerCoedQuadPlayers = PlayerBalancer.balanceUpperLowerCoedQuadsPlayers(new UpperLowerCoedQuadPlayers(upperMen, upperWomen, lowerMen, lowerWomen))
+    val uniqQuads:Set[Set[String]] = QuadGenerator.generateUniqUpperLowerCoedQuads(players.upperMen, players.lowerMen, players.upperWomen, players.lowerWomen)
     generateRoundsFromQuads(roundCount, uniqQuads, upperMen ++ upperWomen ++ lowerMen ++ lowerWomen)
   }
   def generateCoedQuadsRounds(roundCount: Int, men: Set[String], women: Set[String]): Set[Round] = {
@@ -27,13 +28,11 @@ object RoundGenerator {
     if (playerList.isEmpty) new Round(quads)
     else {
       val quad = findQuadForPlayers(uniqQuads, playerList)
-      generateRound(uniqQuads - quad, playerList -- quad, quads + quad)
+      generateRound(uniqQuads - quad, playerList diff quad, quads + quad)
     }
   }
 
   def findQuadForPlayers(uniqQuads: Set[Set[String]], playerList: Set[String]): Set[String] = {
     uniqQuads.find(q => q.subsetOf(playerList)).get
   }
-
-
 }
