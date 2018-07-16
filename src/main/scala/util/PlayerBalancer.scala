@@ -8,15 +8,30 @@ object PlayerBalancer {
 
   def balanceUpperLowerCoedQuadsPlayers(players: UpperLowerCoedQuadPlayers): UpperLowerCoedQuadPlayers = {
     l.info(s"Before balancing, $players")
-    val men: (Set[String], Set[String]) = balancePlayerSets(players.upperMen, "Upper Men", players.lowerMen, "Lower Men")
-    val women: (Set[String], Set[String]) = balancePlayerSets(players.upperWomen, "Upper Women", players.lowerWomen, "Lower Women")
-    val uppers: (Set[String], Set[String]) = balancePlayerSets(men._1, "Upper Men", women._1, "Upper Women")
-    val lowers: (Set[String], Set[String]) = balancePlayerSets(men._2, "Lower Men", women._2, "Lower Women")
 
-    val result = new UpperLowerCoedQuadPlayers(uppers._1, uppers._2, lowers._1, lowers._2)
-    l.info(s"After balancing: $result")
+    if (players.playerCount % 4 != 0) {
+      l.warn("playerCount is not divisible by 4! balancing will be imperfect!")
+    }
 
-    result
+    if (players.lowerMen.size % 2 == players.upperMen.size % 2) {
+      val men: (Set[String], Set[String]) = balancePlayerSets(players.upperMen, "Upper Men", players.lowerMen, "Lower Men")
+      val women: (Set[String], Set[String]) = balancePlayerSets(players.upperWomen, "Upper Women", players.lowerWomen, "Lower Women")
+      val uppers: (Set[String], Set[String]) = balancePlayerSets(men._1, "Upper Men", women._1, "Upper Women")
+      val lowers: (Set[String], Set[String]) = balancePlayerSets(men._2, "Lower Men", women._2, "Lower Women")
+      val result = new UpperLowerCoedQuadPlayers(uppers._1, uppers._2, lowers._1, lowers._2)
+      l.info(s"After balancing: $result")
+      result
+    } else {
+      val uppers: (Set[String], Set[String]) = balancePlayerSets(players.upperMen, "Upper Men", players.upperWomen, "Upper Women")
+      val lowers: (Set[String], Set[String]) = balancePlayerSets(players.lowerMen, "Lower Men", players.lowerWomen, "Lower Women")
+      val men: (Set[String], Set[String]) = balancePlayerSets(uppers._1, "Upper Men", lowers._1, "Lower Men")
+      val women: (Set[String], Set[String]) = balancePlayerSets(uppers._2, "Upper Women", lowers._2, "Lower Women")
+
+      val result = new UpperLowerCoedQuadPlayers(men._1, women._1, men._2, women._2)
+      l.info(s"After balancing: $result")
+      result
+    }
+
   }
 
   /**

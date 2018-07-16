@@ -4,10 +4,12 @@ import java.io.{File, FileInputStream}
 
 import com.typesafe.scalalogging.Logger
 import model.{CoedQuadPlayers, UpperLowerCoedQuadPlayers}
+import org.apache.poi.ss.usermodel.{Cell, CellType}
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 object ExcelReader {
   val l = Logger("ExcelReader")
+
   def readCoedQuadsPlayers(inputFileName: String): CoedQuadPlayers = {
 
     val workbook = new XSSFWorkbook(new FileInputStream(new File(inputFileName)))
@@ -35,7 +37,11 @@ object ExcelReader {
   }
 
 
-  def readUpperLowerCoedQuadsPlayers(inputFileName:String): UpperLowerCoedQuadPlayers = {
+  def addToSet(cell: Cell, s: Set[String]): Set[String] = {
+    if (cell != null && cell.getCellTypeEnum.equals(CellType.STRING)) s + cell.getStringCellValue else s
+  }
+
+  def readUpperLowerCoedQuadsPlayers(inputFileName: String): UpperLowerCoedQuadPlayers = {
 
     val workbook = new XSSFWorkbook(new FileInputStream(new File(inputFileName)))
     val sheet = workbook.getSheetAt(0)
@@ -57,8 +63,8 @@ object ExcelReader {
     var upperWomenIndex: Int = 0
     var lowerWomenIndex: Int = 0
 
+
     headerRow.cellIterator().forEachRemaining(c => {
-      index = index + 1
       if ("Upper Men".equals(c.getStringCellValue)) {
         upperMenIndex = index
       } else if ("Upper Women".equals(c.getStringCellValue)) {
@@ -68,16 +74,16 @@ object ExcelReader {
       } else if ("Lower Women".equals(c.getStringCellValue)) {
         lowerWomenIndex = index
       }
+      index = index + 1
     })
 
-    sheet.rowIterator()
-      .forEachRemaining(r => {
-        upperMen += r.getCell(upperMenIndex).getStringCellValue
-        upperWomen += r.getCell(upperWomenIndex).getStringCellValue
-        lowerMen += r.getCell(lowerMenIndex).getStringCellValue
-        lowerMen += r.getCell(lowerWomenIndex).getStringCellValue
-      })
+    rowIter.forEachRemaining(r => {
+      upperMen = addToSet(r.getCell(upperMenIndex), upperMen)
+      upperWomen = addToSet(r.getCell(upperWomenIndex), upperWomen)
+      lowerMen = addToSet(r.getCell(lowerMenIndex), lowerMen)
+      lowerWomen = addToSet(r.getCell(lowerWomenIndex), lowerWomen)
+    })
 
-    PlayerBalancer.balanceUpperLowerCoedQuadsPlayers(new UpperLowerCoedQuadPlayers(upperMen, upperWomen, lowerMen, lowerWomen))
+    new UpperLowerCoedQuadPlayers(upperMen, upperWomen, lowerMen, lowerWomen)
   }
 }

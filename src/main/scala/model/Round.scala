@@ -1,5 +1,5 @@
 package model
 
-class Round(val quads:Set[Set[String]]) {
-  override def toString: String = quads.mkString(",")
+class Round(val teams:Set[Set[String]]=Set()) {
+  override def toString: String = teams.mkString(",")
 }

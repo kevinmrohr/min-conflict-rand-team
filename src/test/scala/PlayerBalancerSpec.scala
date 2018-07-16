@@ -1,3 +1,4 @@
+import model.UpperLowerCoedQuadPlayers
 import org.scalatest._
 import util.PlayerBalancer
 class PlayerBalancerSpec extends FlatSpec with Matchers {
@@ -17,5 +18,31 @@ class PlayerBalancerSpec extends FlatSpec with Matchers {
 
     balanced._1.size should be(6)
     balanced._2.size should be(7)
+  }
+
+  "unbalanced coed quads players" should "get balanced" in {
+    val upperMen:Set[String] = Set("Joe", "Jon Drake", "Andrew", "Matt", "Aaron")
+    val upperWomen:Set[String] = Set("Anna", "Rose", "Lauren", "Laura", "Jenna")
+    val lowerMen:Set[String] = Set("Manuel", "Allen", "Bobby", "Archer", "Jake", "Darren Wentz")
+    val lowerWomen:Set[String] = Set("Nicole", "Candy", "Candice", "Kloe", "Janet", "Pam", "Paige", "Anne")
+
+    val players = PlayerBalancer.balanceUpperLowerCoedQuadsPlayers(new UpperLowerCoedQuadPlayers(upperMen, upperWomen, lowerMen, lowerWomen))
+
+    players.upperMen.size should be (players.upperWomen.size)
+    players.upperMen.size should be (players.lowerMen.size)
+    players.upperMen.size should be (players.lowerWomen.size)
+  }
+
+  "more unbalanced coed quads players" should "also get balanced" in {
+    val upperMen:Set[String] = Set("Joe", "Jon Drake", "Andrew", "Matt", "Aaron")
+    val upperWomen:Set[String] = Set("Anna", "Rose", "Lauren", "Laura", "Jenna", "Hillary")
+    val lowerMen:Set[String] = Set("Anna", "Rose", "Lauren", "Laura", "Jenna")
+    val lowerWomen:Set[String] = Set("Nicole", "Candy", "Candice", "Kloe", "Janet", "Pam", "Paige", "Anne")
+
+    val players = PlayerBalancer.balanceUpperLowerCoedQuadsPlayers(new UpperLowerCoedQuadPlayers(upperMen, upperWomen, lowerMen, lowerWomen))
+
+    players.upperMen.size should be (players.upperWomen.size)
+    players.upperMen.size should be (players.lowerMen.size)
+    players.upperMen.size should be (players.lowerWomen.size)
   }
 }

@@ -16,7 +16,7 @@ object ExcelWriter {
       roundNumber += 1
       var rowNumber = 0
       val sheet = output.createSheet("Round " + roundNumber)
-      r.quads.foreach(quad => {
+      r.teams.foreach(quad => {
         val row = sheet.createRow(rowNumber)
         rowNumber = rowNumber + 1
 

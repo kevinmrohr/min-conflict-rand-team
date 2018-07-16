@@ -1,5 +1,5 @@
 import org.scalatest._
-import util.{QuadGenerator, RoundGenerator}
+import util.{TeamGenerator, RoundGenerator}
 
 class UniqSpec extends FlatSpec with Matchers {
   "A set of men and a set of women" should "produce a uniq list of all 2 men 2 women possible combinations" in {
@@ -11,11 +11,12 @@ class UniqSpec extends FlatSpec with Matchers {
       "Julie", "Ellie", "Farrah", "Ava")
 
 
-    val uniqQuads = QuadGenerator.generateUniqCoedQuads(men, women)
+    val uniqQuads = TeamGenerator.generateUniqCoedQuads(men, women)
 
     uniqQuads.foreach(q => println(q))
     println(uniqQuads.size)
   }
+  /*
   "A set of men and women" should "produce a unique set of 100 rounds" in {
     val men = Set("Bert", "Ernie", "John Bobbitt", "11Fuckin Frank",
       "Jeff", "Scott", "Aer", "James",
@@ -27,4 +28,5 @@ class UniqSpec extends FlatSpec with Matchers {
 
     rounds.foreach(r => println(r))
   }
+  */
 }
